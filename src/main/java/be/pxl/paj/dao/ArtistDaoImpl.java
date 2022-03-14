@@ -25,7 +25,12 @@ public class ArtistDaoImpl implements ArtistDao {
 
 	@Override
 	public Optional<Artist> getByName(String name) {
-		return Optional.ofNullable(entityManager.createQuery("SELECT a FROM Artist a WHERE a.name = :name", Artist.class).getSingleResult());
+		return Optional.ofNullable(
+				entityManager
+						.createQuery("SELECT a FROM Artist a WHERE a.name = :name", Artist.class)
+						.setParameter("name", name)
+						.getSingleResult()
+		);
 	}
 
 	@Override
