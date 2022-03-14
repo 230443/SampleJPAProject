@@ -3,14 +3,9 @@ package be.pxl.paj.domain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Researcher {
@@ -24,8 +19,8 @@ public class Researcher {
 	private String name;
 	@OneToOne(cascade = CascadeType.ALL)
 	private ContactInformation contactInformation;
-	@ManyToOne
-	private Project project;
+	@ManyToMany
+	private List<Project> projects = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -47,21 +42,27 @@ public class Researcher {
 		this.contactInformation = contactInformation;
 	}
 
-	// TODO: write unit tests for this method
-	public void setProject(Project project) {
-		if (this.project != null) {
-			if (this.project.equals(project)) {
-				LOGGER.info("Researcher [" + name + "] already assigned to [" + project.getName() + "]");
-				return;
-			}
-			this.project.removeResearcher(this);
-		}
-		this.project = project;
-		project.addResearcher(this);
+
+	public List<Project> getProjects() {
+		return projects;
 	}
 
-	public Project getProject() {
-		return project;
+	public void addProject(Project project) {
+		if(projects.contains(project)) {
+			LOGGER.warn("researcher already assigned to this project");
+		} else {
+			projects.add(project);
+			project.addResearcher(this);
+		}
+	}
+
+	public void removeProject(Project project) {
+		if(projects.contains(project)) {
+			projects.remove(project);
+			project.removeResearcher(this);
+		} else {
+			LOGGER.warn("researcher not have this project");
+		}
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public class Researcher {
 				"id=" + id +
 				", name='" + name + '\'' +
 				", contactInformation=" + contactInformation +
-				", project=" + project +
+				", project=" + projects +
 				'}';
 	}
 }

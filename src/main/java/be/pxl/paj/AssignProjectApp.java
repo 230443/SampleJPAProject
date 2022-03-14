@@ -31,7 +31,7 @@ public class AssignProjectApp {
 			String researcherName = scanner.nextLine();
 			Project project = projectDao.findByName(projectName);
 			Researcher researcher = researcherDao.findByName(researcherName);
-			researcher.setProject(project);
+			researcher.addProject(project);
 			researcherDao.update(researcher);
 		}
 		finally {

@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +18,8 @@ public class Project {
 	private Long id;
 	private String name;
 	private LocalDate start;
-	@OneToMany(mappedBy = "project")
-	private List<Researcher> researchers = new ArrayList<>();
+	@ManyToMany(mappedBy = "projects")
+	private final List<Researcher> researchers = new ArrayList<>();
 	@Enumerated(value= EnumType.STRING)
 	private ProjectPhase projectPhase;
 
