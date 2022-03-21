@@ -6,6 +6,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "artists")
+@NamedQueries({
+		@NamedQuery(name = "getByName", query = "SELECT a FROM Artist a WHERE a.name = :name"),
+		@NamedQuery(name = "getAll", query = "SELECT a FROM Artist a"),
+})
 public class Artist {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id

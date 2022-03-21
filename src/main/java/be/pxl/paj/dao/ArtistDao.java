@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ArtistDao {
-	Artist get(int id);
+	Optional<Artist> get(int id);
 	Optional<Artist> getByName(String name);
 	List<Artist> getAll();
 	static ArtistDao getInstance(EntityManager entityManager) {

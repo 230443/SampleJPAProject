@@ -1,5 +1,6 @@
 package be.pxl.paj.dao;
 
+import be.pxl.paj.domain.Album;
 import be.pxl.paj.domain.Artist;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,15 +20,15 @@ public class ArtistDaoImpl implements ArtistDao {
 
 
 	@Override
-	public Artist get(int id) {
-		return entityManager.find(Artist.class, id);
+	public Optional<Artist> get(int id) {
+		return Optional.ofNullable(entityManager.find(Artist.class, id));
 	}
 
 	@Override
 	public Optional<Artist> getByName(String name) {
 		return Optional.ofNullable(
 				entityManager
-						.createQuery("SELECT a FROM Artist a WHERE a.name = :name", Artist.class)
+						.createNamedQuery("getByName", Artist.class)
 						.setParameter("name", name)
 						.getSingleResult()
 		);
@@ -35,6 +36,6 @@ public class ArtistDaoImpl implements ArtistDao {
 
 	@Override
 	public List<Artist> getAll() {
-		return entityManager.createQuery("SELECT a FROM Artist a", Artist.class).getResultList();
+		return entityManager.createNamedQuery("getAll", Artist.class).getResultList();
 	}
 }
